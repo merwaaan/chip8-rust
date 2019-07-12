@@ -1,0 +1,1 @@
+This is a Chip-8 emulator written in Rust, for learning purposes.
