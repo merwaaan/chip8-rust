@@ -1,3 +1,7 @@
+extern crate rand;
+
+use rand::distributions::{Distribution, Uniform};
+
 fn main()
 {
     // Memory
@@ -17,6 +21,9 @@ fn main()
     // Timers
     let mut dt: u8 = 0;
     let mut st: u8 = 0;
+
+    let mut rng = rand::thread_rng();
+    let rng_distrib = Uniform::new_inclusive(0, 0xFF);
 
     loop
     {
@@ -160,7 +167,7 @@ fn main()
             [0xC, x, k1, k2] => // RND Vx, byte
             {
                 println!("RND");
-                // TODO
+                v[x as usize] = rng_distrib.sample(&mut rng) & ((k1 << 4) | k2)
             },
             [0xD, x, y, n] =>
             {
