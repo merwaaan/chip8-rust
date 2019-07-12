@@ -47,7 +47,7 @@ impl Chip8
             mem: [0; 0x1000],
             v: [0; 16],
             i: 0,
-            pc: 0,
+            pc: 0x200,
             stack: [0; 16],
             sp: 0,
             dt: 0,
@@ -66,9 +66,15 @@ impl Chip8
         self.running && self.display.is_running()
     }
 
+    pub fn load_program(&mut self, program: &[u8])
+    {
+        let mut program_mem = &mut self.mem[0x200 .. 0x200 + program.len()];
+        program_mem.copy_from_slice(program);
+    }
+
     pub fn update(&mut self)
     {
-        //self.step();
+        self.step();
         self.display.update();
     }
 
@@ -81,7 +87,7 @@ impl Chip8
             self.mem[self.pc as usize + 1] & 0x0F
         ];
 
-        println!("{}", opcode[0]);
+        println!("{:X}:   {:x}{:x}{:x}{:x}", self.pc, opcode[0], opcode[1], opcode[2], opcode[3]);
 
         match opcode
         {
@@ -292,7 +298,7 @@ impl Chip8
                     self.v[n as usize] = self.mem[(self.i + n as u16) as usize];
                 }
             },
-            _ => panic!("unknown opcode")
+            _ => panic!("unknown opcode {:x}{:x}{:x}{:x}", opcode[0], opcode[1], opcode[2], opcode[3])
         }
 
         // Increment the program counter

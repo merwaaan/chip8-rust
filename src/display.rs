@@ -1,6 +1,6 @@
 extern crate minifb;
 
-use minifb::{Key, Scale, Window, WindowOptions};
+use minifb::{Scale, Window, WindowOptions};
 
 pub struct Display
 {
@@ -15,13 +15,13 @@ impl Display
 {
     pub fn new() -> Self
     {
-        let windowOptions = WindowOptions
+        let window_options = WindowOptions
         {
             scale: Scale::X8,
             ..WindowOptions::default()
         };
 
-        let window = Window::new("chip8-rust", WIDTH, HEIGHT, windowOptions).unwrap_or_else(|e|
+        let window = Window::new("chip8-rust", WIDTH, HEIGHT, window_options).unwrap_or_else(|e|
         {
             panic!("{}", e);
         });
