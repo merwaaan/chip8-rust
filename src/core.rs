@@ -234,7 +234,7 @@ impl Chip8
                 [0xD, x, y, n] =>
                 {
                     println!("DRW");
-                    self.display.draw_sprite(self.v[x as usize], self.v[y as usize], n);
+                    self.v[0xF] = self.display.draw_sprite(self.v[x as usize], self.v[y as usize], &self.mem[self.i as usize .. (self.i + n as u16) as usize]);
                 },
                 [0xE, x, 0x9, 0xE] => // SKP Vx
                 {
@@ -261,6 +261,7 @@ impl Chip8
                 [0xF, x, 0x0, 0xA] => // LD Vx, K
                 {
                     println!("LD");
+                    self.pc -= 2; // TEMP
                     /*self.keyboard.wait(|key|
                     {
                         self.v[x as usize] = key;
@@ -343,7 +344,7 @@ impl Chip8
 }
 
 const FONT: [u8; 5*16] = [
-    0xF0, 0x90, 0x90, 0x90, 0xF0,
+    0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
     0x20, 0x60, 0x20, 0x20, 0x70,
     0xF0, 0x10, 0xF0, 0x80, 0xF0,
     0xF0, 0x10, 0xF0, 0x10, 0xF0,
@@ -358,5 +359,5 @@ const FONT: [u8; 5*16] = [
     0xF0, 0x80, 0x80, 0x80, 0xF0,
     0xE0, 0x90, 0x90, 0x90, 0xE0,
     0xF0, 0x80, 0xF0, 0x80, 0xF0,
-    0xF0, 0x80, 0xF0, 0x80, 0x80
+    0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 ];

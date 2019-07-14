@@ -11,6 +11,9 @@ pub struct Display
 const WIDTH: usize = 64;
 const HEIGHT: usize = 32;
 
+const WHITE: u32 = 0xFFFFFFFF;
+const BLACK: u32 = 0x00000000;
+
 impl Display
 {
     pub fn new() -> Self
@@ -26,7 +29,7 @@ impl Display
             panic!("{}", e);
         });
 
-        let mut buffer: Vec<u32> = vec![0; WIDTH * HEIGHT];
+        let mut buffer: Vec<u32> = vec![BLACK; WIDTH * HEIGHT];
 
         Self
         {
@@ -40,24 +43,33 @@ impl Display
         self.window.is_open()
     }
 
-    pub fn set_pixel(&mut self, x: usize, y: usize, state: bool)
+    // Returns 1 if this erases an existing pixel
+    pub fn draw_sprite(&mut self, x: u8, y: u8, sprite: &[u8]) -> u8
     {
-        self.buffer[y * WIDTH + x] = if state { 0xFFFFFFFF } else { 0x0 };
-    }
+        let mut erased = false;
 
-    pub fn get_pixel(&self, x: usize, y: usize) -> bool
-    {
-        return self.buffer[y * WIDTH + x] > 0;
-    }
+        for (line_index, line) in sprite.iter().enumerate()
+        {
+            for pixel in 0..8
+            {
+                let pixel_index = (y + line_index as u8) as usize * WIDTH + (x + pixel) as usize;
 
-    pub fn draw_sprite(&mut self, x: u8, y: u8, lines: u8)
-    {
-        // TODO
+                let state_buffer = self.buffer[pixel_index] == WHITE;
+                let state_sprite = (line & (1 << (7 - pixel))) > 0;
+
+                let state_next = state_buffer ^ state_sprite;
+                self.buffer[pixel_index] = if state_next { WHITE } else { BLACK };
+
+                erased |= state_buffer && !state_sprite;
+            }
+        }
+
+        erased as u8
     }
 
     pub fn clear(&mut self)
     {
-        // TODO
+        self.buffer.iter_mut().map(|x| *x = BLACK);
     }
 
     pub fn update(&mut self)
