@@ -12,12 +12,12 @@ impl Audio
         Audio {}
     }
 
-    pub fn play()
+    pub fn play(&self)
     {
 
     }
 
-    pub fn stop()
+    pub fn stop(&self)
     {
 
     }

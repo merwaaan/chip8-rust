@@ -4,7 +4,8 @@
 
 pub struct Keyboard
 {
-    keys: [bool; 9]
+    keys: [bool; 9],
+    //wait_callback: Option<Fn(u8)>
 }
 
 impl Keyboard
@@ -18,18 +19,29 @@ impl Keyboard
         }
     }
 
-    pub fn press(&mut self, key: usize)
+    pub fn press(&mut self, key: u8)
     {
-        self.keys[key] = true;
+        self.keys[key as usize] = true;
     }
 
-    pub fn release(&mut self, key: usize)
+    pub fn release(&mut self, key: u8)
     {
-        self.keys[key] = false;
+        self.keys[key as usize] = false;
     }
 
-    pub fn is_pressed(&self, key: usize) -> bool
+    pub fn is_pressed(&self, key: u8) -> bool
     {
-        self.keys[key]
+        self.keys[key as usize]
+    }
+
+    /*pub fn wait<F>(&mut self, callback: F)
+        where F: Fn(u8)
+    {
+
+    }*/
+
+    pub fn is_waiting(&self) -> bool
+    {
+        false
     }
 }

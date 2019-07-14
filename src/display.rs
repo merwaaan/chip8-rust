@@ -50,6 +50,16 @@ impl Display
         return self.buffer[y * WIDTH + x] > 0;
     }
 
+    pub fn draw_sprite(&mut self, x: u8, y: u8, lines: u8)
+    {
+        // TODO
+    }
+
+    pub fn clear(&mut self)
+    {
+        // TODO
+    }
+
     pub fn update(&mut self)
     {
         self.window.update_with_buffer(&self.buffer).unwrap();
